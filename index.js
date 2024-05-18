@@ -5,7 +5,7 @@ const connectDB = require('./config/connectdb.js');
 const userRoutes = require('./routes/userRoutes.js');
 const imageRoute = require('./routes/imageRoute.js');
 const multer = require('multer');
-const userProfileRoutes = require('./routes/userprofileRoutes');
+const userProfileRoutes = require('./routes/userprofileRoutes.js'); // Corrected import statement
 dotenv.config();
 
 const app = express();
@@ -27,8 +27,7 @@ app.use(express.json());
 // Load Routes
 app.use("/api/user", userRoutes);
 app.use('/api/image', imageRoute); // Use Multer middleware here
-app.use('/api/userprofile', userprofileRoutes);
-
+app.use('/api/userprofile', userProfileRoutes); // Corrected usage
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`)
