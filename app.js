@@ -12,7 +12,7 @@ const UserController = require('./controllers/userController.js');
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 1481;
 const DATABASE_URL = process.env.DATABASE_URL;
 
 // CORS Policy
@@ -20,18 +20,18 @@ app.use(cors());
 
 // Database Connection
 connectDB(DATABASE_URL);
-// Multer Configuration
-//app.use('/uploads', express.static('uploads'));
-//router.post('/upload', upload.single('file'), ImageController.uploadImage);
+
+// Static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-//app.post('/update', upload, UserController.updateUserInfo);
 
-
+// Middleware
 app.use(express.json());
+
+// Routes
 app.use("/api/user", userRoutes);
 app.use('/api/transaction', transactionRoutes);
-//app.use('/api/profileimage', profileimageRoute);
 app.post('/api/user/update-profile', uploadProfileImage, UserController.updateUserInfo);
+
 app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`)
-})
+  console.log(`Server listening at http://localhost:${port}`);
+});
