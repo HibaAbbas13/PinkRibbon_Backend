@@ -4,7 +4,6 @@ const UserModel =require( '../models/User.js')
 
 class authMiddleware{
  static checkUserAuth = async (req, res, next) => {
-
   let token
 
   const { authorization } = req.headers

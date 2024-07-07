@@ -3,6 +3,7 @@ const bcrypt =require( 'bcrypt')
 const jwt= require( 'jsonwebtoken')
 const transporter =require( '../config/emailConfig.js')
 const fs = require('fs');
+
 class UserController {
   static userRegistration = async (req, res) => {
     const { email, password, password_confirmation, deviceToken } = req.body;
@@ -94,6 +95,7 @@ class UserController {
   
           // Send Email
           let info = await transporter.sendMail({
+            
             from: process.env.EMAIL_USER, // Sender address
             to: user.email, // Recipient address
             subject: "GeekShop - Password Reset Link",
@@ -151,6 +153,21 @@ class UserController {
   }
   
 
+  static getUserById = async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      res.status(200).json(user);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+  
 static getUsers = async (req, res) => {
   try {
     const users = await UserModel.find({}, 'id email  name  surname bloodGroup mobileNumber bmi gender dob'); // Selecting only id, email, and name fields
@@ -164,6 +181,7 @@ static getUsers = async (req, res) => {
 static updateUserInfo = async (req, res) => {
   try {
     const { userId, name, surname, bloodGroup, mobileNumber, bmi, gender, dob } = req.body;
+    const { originalname, path: filePath, mimetype } = req.file;
 
     // Find user by ID
     const user = await UserModel.findById(userId);

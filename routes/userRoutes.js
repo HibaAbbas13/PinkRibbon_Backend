@@ -3,9 +3,10 @@ const router = express.Router();
 const UserController =require( '../controllers/userController.js');
 const authMiddleware =require( '../middlewares/auth-middleware.js');
 const { uploadProfileImage } = require('../config/upload.js');
+const transporter=require('../config/emailConfig.js')
+
 router.use('/changepassword', authMiddleware.checkUserAuth)
 router.use('/loggeduser', authMiddleware.checkUserAuth)
-
 // Public Routes
 router.post('/register', UserController.userRegistration)
 router.post('/update', uploadProfileImage ,UserController.updateUserInfo)
@@ -18,5 +19,6 @@ router.post('/logout', UserController.userLogout);
 // Get current user profile
 
 router.get('/users', UserController.getUsers);
+router.get('/:userId', UserController.getUserById);
 
 module.exports=router

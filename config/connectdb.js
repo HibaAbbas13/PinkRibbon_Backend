@@ -1,21 +1,18 @@
 const mongoose = require('mongoose');
 
-const connectDB = async (DATABASE_URL) => {
+const connectDB = async () => {
   try {
-    const DB_OPTIONS = {
-      dbName: "PinkRibbon",
-      serverSelectionTimeoutMS: 30000 ,
-      useNewUrlParser: true, // Use new URL parser
-      useUnifiedTopology: true
-    };
     console.log('Connecting to MongoDB...');
-    
-    await mongoose.connect(DATABASE_URL, DB_OPTIONS);
-    console.log('Connected to MongoDB successfully...');
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error.message);
-    process.exit(1); // Exit process with failure
+    await mongoose.connect(process.env.DATABASE_URL, {
+     
+      serverSelectionTimeoutMS: 5000 // Optional, shorter timeout
+    });
+    console.log('MongoDB connected successfully!');
+  } catch (err) {
+    console.error('Failed to connect to MongoDB', err);
+    process.exit(1); // Exit the process with failure
   }
 };
 
 module.exports = connectDB;
+
