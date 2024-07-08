@@ -1,7 +1,6 @@
 const multer = require('multer');
 const path = require('path');
 
-// Set storage engine for TransactionImage
 const transactionImageStorage = multer.diskStorage({
   destination: './uploads/transactions',
   filename: (req, file, cb) => {
@@ -9,7 +8,7 @@ const transactionImageStorage = multer.diskStorage({
   }
 });
 
-// Set storage engine for ProfileImage
+
 const profileImageStorage = multer.diskStorage({
   destination: './uploads/profiles',
   filename: (req, file, cb) => {
@@ -17,25 +16,24 @@ const profileImageStorage = multer.diskStorage({
   }
 });
 
-// Init upload for TransactionImage
+
 const uploadTransactionImage = multer({
   storage: transactionImageStorage,
-  limits: { fileSize: 1000000 }, // limit to 1MB
+  limits: { fileSize: 1000000 }, 
   fileFilter: (req, file, cb) => {
     checkFileType(file, cb);
   }
-}).single('TransactionImage'); // Assuming the form field name is 'TransactionImage'
+}).single('TransactionImage'); 
 
-// Init upload for ProfileImage
+
 const uploadProfileImage = multer({
   storage: profileImageStorage,
   limits: { fileSize: 1000000 }, // limit to 1MB
   fileFilter: (req, file, cb) => {
     checkFileType(file, cb);
   }
-}).single('ProfileImage'); // Assuming the form field name is 'ProfileImage'
+}).single('ProfileImage'); 
 
-// Check file type
 function checkFileType(file, cb) {
   cb(null, true);
 }

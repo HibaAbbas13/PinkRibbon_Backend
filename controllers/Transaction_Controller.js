@@ -44,6 +44,30 @@ class TransactionController {
             res.status(500).json({ error: 'Internal server error' });
         }
     }
+
+
+    static updateTransactionStatus = async (req, res) => {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        try {
+            const updatedTransaction = await Transaction.findByIdAndUpdate(
+                id,
+                { status },
+                { new: true } // Return the updated document
+            );
+
+            if (!updatedTransaction) {
+                return res.status(404).json({ error: 'Transaction not found' });
+            }
+
+            res.status(200).json(updatedTransaction);
+        } catch (error) {
+            console.error('Error updating transaction status:', error);
+            res.status(500).json({ error: 'Failed to update transaction status' });
+        }
+    }
+
 }
 
 module.exports = { TransactionController };

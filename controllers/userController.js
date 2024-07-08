@@ -182,19 +182,14 @@ static updateUserInfo = async (req, res) => {
   try {
     const { userId, name, surname, bloodGroup, mobileNumber, bmi, gender, dob } = req.body;
     const { originalname, path: filePath, mimetype } = req.file;
-
     // Find user by ID
     const user = await UserModel.findById(userId);
-
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-
-    // Check if req.file exists before destructuring
+ 
     if (req.file) {
-      const { originalname, path: filePath, mimetype } = req.file;
-
-      // Update additional information
+    
       user.name = name;
       user.surname = surname;
       user.bloodGroup = bloodGroup;
@@ -207,7 +202,7 @@ static updateUserInfo = async (req, res) => {
       user.profileImage = {
         imagename: originalname,
         path: filePath,
-        imageData: fs.readFileSync(filePath), // Read file as buffer
+        imageData: fs.readFileSync(filePath), 
         imageContentType: mimetype
       };
     } else {

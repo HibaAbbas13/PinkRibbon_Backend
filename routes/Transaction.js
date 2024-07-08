@@ -9,6 +9,7 @@ router.post('/upload', authMiddleware.checkUserAuth, uploadTransactionImage, Tra
 
 // Route to get an image by ID
 router.get('/', TransactionController.gettransaction);
+router.put('/:id', TransactionController.updateTransactionStatus);
 
 
 module.exports = router;
