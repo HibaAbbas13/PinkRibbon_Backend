@@ -93,15 +93,15 @@ class UserController {
           const link = `${process.env.BASE_URL}/api/user/reset/${user._id}/${token}`;;
           console.log(link);
   
-          // Send Email
-          let info = await transporter.sendMail({
+         let info = await transporter.sendMail({
             
             from: process.env.EMAIL_USER, // Sender address
             to: user.email, // Recipient address
             subject: "GeekShop - Password Reset Link",
             html: `<a href="${link}">Click Here</a> to Reset Your Password`
           });
-  
+    // Send Email
+         
           console.log("Message sent: %s", info.messageId);
           res.send({ "status": "success", "message": "Password Reset Email Sent... Please Check Your Email" });
         } else {
@@ -181,15 +181,19 @@ static getUsers = async (req, res) => {
 static updateUserInfo = async (req, res) => {
   try {
     const { userId, name, surname, bloodGroup, mobileNumber, bmi, gender, dob } = req.body;
-    const { originalname, path: filePath, mimetype } = req.file;
+
     // Find user by ID
     const user = await UserModel.findById(userId);
+
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
- 
+
+    // Check if req.file exists before destructuring
     if (req.file) {
-    
+      const { originalname, path: filePath, mimetype } = req.file;
+
+      // Update additional information
       user.name = name;
       user.surname = surname;
       user.bloodGroup = bloodGroup;
@@ -202,7 +206,7 @@ static updateUserInfo = async (req, res) => {
       user.profileImage = {
         imagename: originalname,
         path: filePath,
-        imageData: fs.readFileSync(filePath), 
+        imageData: fs.readFileSync(filePath), // Read file as buffer
         imageContentType: mimetype
       };
     } else {
@@ -225,7 +229,6 @@ static updateUserInfo = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
-
 }
 
 module.exports=  UserController
