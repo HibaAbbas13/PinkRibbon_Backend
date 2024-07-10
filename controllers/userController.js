@@ -190,35 +190,27 @@ static updateUserInfo = async (req, res) => {
     }
 
     // Check if req.file exists before destructuring
+    // Update user fields
+    user.name = name;
+    user.surname = surname;
+    user.bloodGroup = bloodGroup;
+    user.mobileNumber = mobileNumber;
+    user.bmi = bmi;
+    user.gender = gender;
+    user.dob = dob;
+
+    // Handle profile image upload if present
     if (req.file) {
       const { originalname, path: filePath, mimetype } = req.file;
 
-      // Update additional information
-      user.name = name;
-      user.surname = surname;
-      user.bloodGroup = bloodGroup;
-      user.mobileNumber = mobileNumber;
-      user.bmi = bmi;
-      user.gender = gender;
-      user.dob = dob;
-
-      // Handle profile image upload
       user.profileImage = {
         imagename: originalname,
         path: filePath,
-        imageData: fs.readFileSync(filePath), // Read file as buffer
-        imageContentType: mimetype
+        imageData: fs.readFileSync(filePath),
+        imageContentType: mimetype,
       };
-    } else {
-      // Update additional information without profile image
-      user.name = name;
-      user.surname = surname;
-      user.bloodGroup = bloodGroup;
-      user.mobileNumber = mobileNumber;
-      user.bmi = bmi;
-      user.gender = gender;
-      user.dob = dob;
     }
+
 
     // Save changes
     await user.save();
